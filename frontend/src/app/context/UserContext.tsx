@@ -1,26 +1,40 @@
-"use client"
-import React, { createContext, useContext } from 'react';
+"use client";
 
-// ユーザーコンテキストの作成
-const UserContext = createContext<{ uid: string | null; updateUid: (newUid: string) => void } | null>(null);
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
-export const UserProvider = ({ children }) => {
-  const [uid, setUid] = React.useState<string | null>(null); // uidの状態を管理
+interface UserContextType {
+  uid: string | null;
+  updateUid: (newUid: string) => void;
+}
 
+const UserContext = createContext<UserContextType | null>(null);
 
-  // uidを更新する関数を提供
+export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [uid, setUid] = useState<string | null>(null);
+
   const updateUid = (newUid: string) => {
-    setUid(newUid); // 新しいuidを設定
+    setUid(newUid);
+    localStorage.setItem('uid', newUid); // uidをローカルストレージに保存
   };
 
+  useEffect(() => {
+    const storedUid = localStorage.getItem('uid');
+    if (storedUid) {
+      setUid(storedUid);
+    }
+  }, []);
+
   return (
-    <UserContext.Provider value={{ uid, updateUid }}> {/* updateUidを提供 */}
+    <UserContext.Provider value={{ uid, updateUid }}>
       {children}
     </UserContext.Provider>
   );
 };
 
-// ユーザーコンテキストを使用するためのカスタムフック
 export const useUser = () => {
-  return useContext(UserContext);
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error("useUser must be used within a UserProvider");
+  }
+  return context;
 };

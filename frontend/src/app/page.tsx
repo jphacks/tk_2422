@@ -21,10 +21,13 @@ export default function SignIn() {
 
       const docSnap = await getDoc(doc(db, "Users", user.uid));
 
+      console.log("docSnap.data()", docSnap.data());
+
       if (docSnap.exists() && docSnap.data().name !== "") {
         router.push('/home');
         await setDoc(doc(db, "Users", user.uid), {
           uid: user.uid,
+          name: docSnap.data().name,
         });
       } else {
         router.push("/submitName");
