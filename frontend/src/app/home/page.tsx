@@ -41,6 +41,8 @@ export default function Component() {
   const { uid } = useUser() || { uid: null };
   console.log("uid", uid);
 
+
+
   return (
     <div className="min-h-screen bg-gradient-to-tr from-gray-950 via-black to-gray-800">
       <Header />
@@ -65,6 +67,8 @@ export default function Component() {
                 <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
               </PopoverContent>
             </Popover>
+
+            <button className={cn("bg-gray-900 w-[240px] justify-start text-left font-normal", !date && "text-muted-foreground")} onClick={() => { router.push("/submitKeeper") }}>ボタン</button>
 
             <div className="flex-1 min-w-[200px]">
               <Label htmlFor="area" className="sr-only">

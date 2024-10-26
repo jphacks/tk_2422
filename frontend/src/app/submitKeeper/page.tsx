@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import { useUser } from '../context/UserContext';
+import { addDoc, collection, doc } from 'firebase/firestore'
+import { db } from '../../lib/firebase/firebase'
 
 const SubmitKeeper: React.FC = () => {
     const { uid } = useUser();
@@ -12,9 +14,16 @@ const SubmitKeeper: React.FC = () => {
 
     console.log("uid", uid);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // ここでフォームのデータを処理するロジックを追加
+        await addDoc(collection(db, "Keepers"), {
+            start_date: startDate,
+            end_date: endDate,
+            region: region,
+            address: address,
+            uid: uid,
+        });
+        console.log("キーパー登録完了：");
         console.log({ startDate, endDate, region, address });
     };
 
