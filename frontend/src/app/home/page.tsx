@@ -34,16 +34,21 @@ export default function Component() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-black to-gray-800">
+    <div className="min-h-screen bg-gradient-to-tr from-gray-950 via-black to-gray-800">
       <Header />
 
       <main className="container mx-auto mt-12 px-4">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="bg-gray-900 dark:bg-gray-800 rounded-xl shadow-lg p-8 mb-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="bg-gradient-to-br border-white from-gray-950 via-black to-gray-800 rounded-xl shadow-lg p-8 mb-12"
+        >
           <h2 className="text-2xl font-semibold mb-6 text-gray-100 dark:text-gray-200">荷物を預ける場所を探す</h2>
           <div className="flex flex-wrap gap-6">
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="outline" className={cn("w-[240px] justify-start text-left font-normal", !date && "text-muted-foreground")}>
+                <Button variant="outline" className={cn("bg-gray-900 w-[240px] justify-start text-left font-normal", !date && "text-muted-foreground")}>
                   <CalendarIcon className="mr-2 h-5 w-5 text-gray-100" />
                   {date ? format(date, "PPP", { locale: ja }) : <span className="text-gray-100">日付を選択</span>}
                 </Button>
@@ -58,11 +63,11 @@ export default function Component() {
                 エリア
               </Label>
               <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white" />
                 <Input
                   id="area"
                   placeholder="エリアを入力"
-                  className="pl-10 bg-gray-800 border-gray-600 text-white rounded-md"
+                  className="pl-10 bg-gray-900 border-white text-white rounded-md"
                   value={selectedRegion ? regions.find((r) => r.id === selectedRegion)?.name || "" : ""}
                   readOnly
                 />
@@ -74,20 +79,25 @@ export default function Component() {
                 荷物数
               </Label>
               <div className="relative">
-                <Luggage className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                <Input id="luggage" type="number" placeholder="荷物数" className="pl-10 bg-gray-800 border-gray-600 text-white rounded-md" min="1" />
+                <Luggage className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white" />
+                <Input id="luggage" type="number" placeholder="荷物数" className="pl-10 bg-gray-900 border-white text-white rounded-md" min="1" />
               </div>
             </div>
 
-            <Button className="bg-green-600 hover:bg-green-700 text-white">
-              <Search className="mr-2 h-4 w-4" />
+            <Button className="border-[1px] border-white bg-gray-900 hover:bg-gray-800 text-white">
+              <Search className="mr-2 h-4 w-4 " />
               検索
             </Button>
           </div>
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-12">
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.2 }} className="bg-gray-900 dark:bg-gray-800 rounded-xl shadow-lg p-8">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="bg-gradient-to-br bg-gray-900 dark:bg-gray-800 rounded-xl shadow-lg p-8"
+          >
             <h2 className="text-2xl font-semibold mb-6 text-gray-100 dark:text-gray-200">料金表</h2>
             <table className="w-full">
               <thead>
@@ -113,7 +123,12 @@ export default function Component() {
             </table>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, delay: 0.4 }} className="bg-gray-900 dark:bg-gray-800 rounded-xl shadow-lg p-8">
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="bg-gradient-to-br bg-gray-900 dark:bg-gray-800 rounded-xl shadow-lg p-8"
+          >
             <h2 className="text-2xl font-semibold mb-6 text-gray-100 dark:text-gray-200">エリアから探す</h2>
             <div className="aspect-w-4 aspect-h-3">
               <svg viewBox="0 0 400 440" className="w-full h-full">
@@ -135,7 +150,7 @@ export default function Component() {
                           <motion.path
                             d={region.path}
                             fill={selectedRegion === region.id ? "hsl(142, 76%, 36%)" : "hsl(151, 55%, 41%)"}
-                            stroke="white"
+                            stroke="#111827"
                             strokeWidth="2"
                             className="cursor-pointer transition-colors duration-200 hover:fill-green-400 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
                             whileHover={{ scale: 1.05 }}
