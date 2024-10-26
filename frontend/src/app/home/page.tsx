@@ -1,5 +1,7 @@
 "use client";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,7 +13,8 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 import { motion } from "framer-motion";
-import Header from "@/components/header";
+import Header from "@/components/header"; // Firestoreのメソッド
+import { useUser } from '../context/UserContext';
 
 const regions = [
   { id: "hokkaido", name: "北海道", path: "M280,40 h80 v60 h-80 Z" },
@@ -29,9 +32,14 @@ export default function Component() {
   const [date, setDate] = useState<Date>();
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null);
 
+  const router = useRouter();
+
   const handleRegionClick = (regionId: string) => {
     setSelectedRegion(regionId);
+    router.push(`/home/${regionId}`);
   };
+  const { uid } = useUser() || { uid: null };
+  console.log("uid", uid);
 
   return (
     <div className="min-h-screen bg-gradient-to-tr from-gray-950 via-black to-gray-800">
