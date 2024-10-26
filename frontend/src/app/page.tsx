@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../lib/firebase/firebase";
 import { db } from "../lib/firebase/firebase"; // Firestoreのインスタンスをインポート
-import { doc, setDoc } from "firebase/firestore"; // Firestoreのメソッド
+import { doc, getDoc, setDoc } from "firebase/firestore"; // Firestoreのメソッド
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -13,20 +13,27 @@ import { useUser } from "./context/UserContext";
 export default function SignIn() {
   const [username, setUsername] = useState("");
   const router = useRouter();
-  const { updateUid } = useUser() || { updateUid: () => {} }; // useUserがnullの場合のデフォルト関数を提供
+  const { updateUid } = useUser() || { updateUid: () => { } }; // useUserがnullの場合のデフォルト関数を提供
   const signInWithGoogle = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
+      const docSnap = await getDoc(doc(db, "Users", user.uid));
+
+      if (docSnap.exists() && docSnap.data().name !== "") {
+        router.push('/home');
+        await setDoc(doc(db, "Users", user.uid), {
+          uid: user.uid,
+        });
+      } else {
+        router.push("/submitName");
+      }
+
       // UIDをFirestoreのUsersコレクションに保存
-      await setDoc(doc(db, "Users", user.uid), {
-        uid: user.uid,
-        name: username,
-      });
+
       updateUid(user.uid);
       console.log("ユーザー情報がFirestoreに保存されました");
-      router.push("/home");
     } catch (error) {
       console.error("エラーが発生しました:", error);
     }
@@ -43,14 +50,14 @@ export default function SignIn() {
 
           <form className="space-y-6">
             <div className="relative">
-              <Input
+              {/* <Input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Your name"
                 className="w-full h-14 px-6 rounded-full bg-gray-800/50 border-gray-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 required
-              />
+              /> */}
               <Button onClick={signInWithGoogle} type="button" className="absolute right-1 top-1 h-12 px-8 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold transition-colors">
                 Sign In with
                 <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
