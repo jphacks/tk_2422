@@ -5,7 +5,7 @@ const Header: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
 
   return (
-    <section className="w-full px-3 antialiased bg-gradient-to-br from-gray-900 via-black to-gray-800 lg:px-6">
+    <section className="w-full px-3 antialiased lg:px-6">
       <div className="mx-auto max-w-7xl">
         <nav className="flex items-center w-full h-24 select-none">
           <div className="relative flex flex-wrap items-start justify-between w-full mx-auto font-medium md:items-center md:h-24 md:justify-between">
@@ -63,7 +63,7 @@ const Header: React.FC = () => {
                   </a>
                   <a
                     href="#_"
-                    className="inline-flex items-center justify-center w-full px-4 py-3 md:py-1.5 font-medium leading-6 text-center whitespace-no-wrap transition duration-150 ease-in-out border border-transparent md:mr-1 text-gray-600 md:w-auto bg-white rounded-lg md:rounded-full hover:bg-white focus:outline-none focus:border-gray-700 focus:shadow-outline-gray active:bg-gray-700"
+                    className="inline-flex items-center justify-center w-full px-4 py-3 md:py-1.5 font-medium leading-6 text-center whitespace-no-wrap transition duration-150 ease-in-out border border-transparent md:mr-1 text-gray-900 md:w-auto bg-white rounded-lg md:rounded-full hover:bg-white focus:outline-none focus:border-gray-700 focus:shadow-outline-gray active:bg-gray-700"
                   >
                     Sign Up
                   </a>
