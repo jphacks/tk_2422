@@ -158,3 +158,5 @@ export default function Component() {
         </div>
       </main>
     </div>
+  );
+}
