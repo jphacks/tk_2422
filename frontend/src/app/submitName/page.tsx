@@ -43,7 +43,7 @@ export default function SubmitName() {
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-black to-gray-800 flex items-center justify-center px-4">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="w-full max-w-md">
         <div className="text-center space-y-6 mb-12">
-          <h1 className="text-4xl font-bold text-white mb-2">Welcome to LuggPal</h1>
+          <h1 className="text-4xl font-bold text-white mb-2">LuggPalへようこそ</h1>
           <p className="text-xl text-gray-200">Please enter your name to continue</p>
         </div>
 
@@ -63,17 +63,6 @@ export default function SubmitName() {
           <Button type="submit" className="w-full h-14 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold transition-all transform hover:scale-105">
             Continue
           </Button>
-
-          <p className="text-center text-sm text-gray-400">
-            By continuing, you agree to our{" "}
-            <a href="#" className="text-emerald-400 hover:text-emerald-300 underline">
-              Terms of Service
-            </a>{" "}
-            and{" "}
-            <a href="#" className="text-emerald-400 hover:text-emerald-300 underline">
-              Privacy Policy
-            </a>
-          </p>
         </form>
       </motion.div>
     </div>
