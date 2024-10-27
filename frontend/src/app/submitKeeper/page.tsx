@@ -26,6 +26,7 @@ const SubmitKeeper: React.FC = () => {
   const [endDate, setEndDate] = useState<Date>();
   const [region, setRegion] = useState("");
   const [address, setAddress] = useState("");
+  const [phoneNum, setPhoneNum] = useState("");
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false); // New loading state
 
@@ -42,6 +43,7 @@ const SubmitKeeper: React.FC = () => {
     setEndDate(undefined);
     setRegion("");
     setAddress("");
+    setPhoneNum("");
     setError("");
   };
 
@@ -64,6 +66,7 @@ const SubmitKeeper: React.FC = () => {
           address: address,
           uid: uid,
           name: userName,
+          phone: phoneNum,
         });
         console.log("キーパー登録完了");
         clearForm();
@@ -155,6 +158,19 @@ const SubmitKeeper: React.FC = () => {
                 placeholder="住所を入力してください"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
+                className="w-full h-14 rounded-full bg-white/10 text-white placeholder-gray-400 px-6"
+                required
+                disabled={loading} // Disable during loading
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-200 px-4">電話番号</label>
+              <Input
+                type="tel"
+                placeholder="電話番号を入力してください"
+                value={phoneNum}
+                onChange={(e) => setPhoneNum(e.target.value)}
                 className="w-full h-14 rounded-full bg-white/10 text-white placeholder-gray-400 px-6"
                 required
                 disabled={loading} // Disable during loading
