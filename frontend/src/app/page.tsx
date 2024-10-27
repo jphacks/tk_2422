@@ -7,18 +7,16 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useUser } from "./context/UserContext";
-import { log } from "console";
 
 export default function SignIn() {
   const router = useRouter();
-  const { updateUid } = useUser() || { updateUid: () => { } };
+  const { updateUid } = useUser() || { updateUid: () => {} };
 
   const signInWithGoogle = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       const docSnap = await getDoc(doc(db, "Users", user.uid));
-
 
       if (docSnap.exists() && docSnap.data().name !== "") {
         router.push("/home");
