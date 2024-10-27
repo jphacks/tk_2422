@@ -63,7 +63,7 @@ const Header: React.FC = () => {
                 <div className="flex flex-col items-center justify-end w-full h-full pt-2 md:w-full md:flex-row md:py-0">
                   <Link
                     href="/submitKeeper"
-                    className="inline-flex items-center justify-center w-full px-4 py-3 md:py-1.5 font-medium leading-6 text-center whitespace-no-wrap transition duration-150 ease-in-out border border-transparent md:mr-1 text-gray-900 md:w-auto bg-white rounded-lg md:rounded-full hover:bg-white focus:outline-none focus:border-gray-700 focus:shadow-outline-gray active:bg-gray-700"
+                    className="inline-flex items-center justify-center w-full px-4 py-3 md:py-1.5 font-medium leading-6 text-center whitespace-no-wrap transition duration-150 ease-in-out border border-transparent md:mr-1 md:w-auto bg-emerald-500 rounded-lg md:rounded-full hover:bg-emerald-600 text-white focus:outline-none focus:border-gray-700 focus:shadow-outline-gray active:bg-gray-700"
                   >
                     for Keeper
                   </Link>

@@ -106,43 +106,45 @@ export default function RegionPage({ params }: { params: { regionId: string } })
             transition={{ duration: 0.5, delay: 0.2 }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
-            {keepers.map((keeper) => (
-              <motion.div
-                key={keeper.id}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => { // 修正: カードクリック時の処理
-                  if (confirm(`${keeper.name}を登録しますか？`)) { // 確認ポップアップ
-                    registerKeeper(keeper.id); // 登録用関数を呼び出し
-                    window.location.href = '/home'; // /homeにリダイレクト
-                  }
-                }}
-              >
-                <Card className="bg-gray-800 border-gray-700 hover:bg-gray-700 transition-colors duration-200">
-                  <CardHeader>
-                    <CardTitle>
-                      <CardTitle className="text-white">{keeper.name}</CardTitle>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      <div className="flex items-center">
-                        <MapPin className="mr-2 h-4 w-4 text-gray-400" />
-                        <p className="text-sm text-gray-300">{keeper.address}</p>
-                      </div>
-                      <div className="flex items-center">
-                        <Phone className="mr-2 h-4 w-4 text-gray-400" />
-                        <p className="text-sm text-gray-300">{keeper.phone}</p>
-                      </div>
-                      <div className="flex items-center">
-                        <Mail className="mr-2 h-4 w-4 text-gray-400" />
-                        <p className="text-sm text-gray-300">{keeper.email}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+            {keepers.map((keeper) =>
+              keeper.id === travelerUid ? null :
+                (
+                  <motion.div
+                    key={keeper.id}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => { // 修正: カードクリック時の処理
+                      if (confirm(`${keeper.name}を登録しますか？`)) { // 確認ポップアップ
+                        registerKeeper(keeper.id); // 登録用関数を呼び出し
+                        window.location.href = '/home'; // /homeにリダイレクト
+                      }
+                    }}
+                  >
+                    <Card className="bg-gray-800 border-gray-700 hover:bg-gray-700 transition-colors duration-200">
+                      <CardHeader>
+                        <CardTitle>
+                          <CardTitle className="text-white">{keeper.name}</CardTitle>
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-2">
+                          <div className="flex items-center">
+                            <MapPin className="mr-2 h-4 w-4 text-gray-400" />
+                            <p className="text-sm text-gray-300">{keeper.address}</p>
+                          </div>
+                          <div className="flex items-center">
+                            <Phone className="mr-2 h-4 w-4 text-gray-400" />
+                            <p className="text-sm text-gray-300">{keeper.phone}</p>
+                          </div>
+                          <div className="flex items-center">
+                            <Mail className="mr-2 h-4 w-4 text-gray-400" />
+                            <p className="text-sm text-gray-300">{keeper.email}</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
           </motion.div>
         ) : (
           <motion.p
