@@ -14,7 +14,7 @@ import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 import { motion } from "framer-motion";
 import Header from "@/components/header"; // Firestoreのメソッド
-import { useUser } from '../context/UserContext';
+import { useUser } from "../context/UserContext";
 
 const regions = [
   { id: "hokkaido", name: "北海道", path: "M280,40 h80 v60 h-80 Z" },
@@ -41,8 +41,6 @@ export default function Component() {
   const { uid } = useUser() || { uid: null };
   console.log("uid in home", uid);
 
-
-
   return (
     <div className="min-h-screen bg-gradient-to-tr from-gray-950 via-black to-gray-800">
       <Header />
@@ -67,8 +65,6 @@ export default function Component() {
                 <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
               </PopoverContent>
             </Popover>
-
-            <button className={cn("bg-gray-900 w-[240px] justify-start text-left font-normal", !date && "text-muted-foreground")} onClick={() => { router.push("/submitKeeper") }}>ボタン</button>
 
             <div className="flex-1 min-w-[200px]">
               <Label htmlFor="area" className="sr-only">
