@@ -1,4 +1,4 @@
-#LuggPal
+# LuggPal
 ![{E451A53C-E360-4A3F-A808-309B0554001C}](https://github.com/user-attachments/assets/2600e8e6-ba8a-4bbb-8199-e325925144af)
 
 ## 製品概要
