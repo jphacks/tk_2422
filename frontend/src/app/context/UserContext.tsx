@@ -36,5 +36,8 @@ export const useUser = () => {
   if (!context) {
     throw new Error("useUser must be used within a UserProvider");
   }
-  return context;
+  return {
+    uid: context.uid || "none", // uidが取得できなかった場合は"none"を返す
+    updateUid: context.updateUid,
+  };
 };
