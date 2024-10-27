@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { db } from "../../lib/firebase/firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
@@ -17,6 +17,7 @@ export default function SubmitName() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+
     if (!name.trim()) {
       setError("Please enter your name");
       return;
@@ -27,9 +28,13 @@ export default function SubmitName() {
         throw new Error("User ID not found");
       }
 
+      const docSnap = await getDoc(doc(db, "Users", uid));
+      const email = docSnap.data()?.email;
+
       await setDoc(doc(db, "Users", uid), {
         uid: uid,
         name: name.trim(),
+        email: email,
       });
 
       router.push("/home");

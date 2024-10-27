@@ -19,6 +19,18 @@ import { Spinner } from "@/components/ui/spinner"; // Add a spinner component if
 
 const regions = ["北海道", "東北", "関東", "中部", "近畿", "中国", "四国", "九州", "沖縄"] as const;
 
+const regionMap: Record<string, string> = {
+    北海道: "hokkaido",
+    東北: "tohoku",
+    関東: "kanto",
+    中部: "chubu",
+    近畿: "kinki",
+    中国: "chugoku",
+    四国: "shikoku",
+    九州: "kyushu",
+    沖縄: "okinawa",
+};
+
 const SubmitKeeper: React.FC = () => {
     const router = useRouter();
     const { uid } = useUser();
@@ -60,11 +72,18 @@ const SubmitKeeper: React.FC = () => {
             const userData = await fetchUser(uid);
             const userName = userData ? userData[0] : null;
             const email = userData ? userData[1] : null;
+            console.log(userData);
+            console.log(uid);
+
+
+
+            const regionId = regionMap[region];
+
             if (userName) {
                 await addDoc(collection(db, "Keepers"), {
                     start_date: startDate,
                     end_date: endDate,
-                    region: region,
+                    region: regionId,
                     address: address,
                     uid: uid,
                     name: userName,

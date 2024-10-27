@@ -10,25 +10,29 @@ import { useUser } from "./context/UserContext";
 
 export default function SignIn() {
   const router = useRouter();
-  const { updateUid } = useUser() || { updateUid: () => {} };
+  const { updateUid } = useUser() || { updateUid: () => { } };
 
   const signInWithGoogle = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       const docSnap = await getDoc(doc(db, "Users", user.uid));
+      const email = user.email;
+
+      console.log(email);
+
 
       if (docSnap.exists() && docSnap.data().name !== "") {
         router.push("/home");
         await setDoc(doc(db, "Users", user.uid), {
           uid: user.uid,
           name: docSnap.data().name,
-          email: user.email,
+          email: email,
         });
       } else {
         await setDoc(doc(db, "Users", user.uid), {
           uid: user.uid,
-          email: user.email,
+          email: email,
         });
         router.push("/submitName");
       }
