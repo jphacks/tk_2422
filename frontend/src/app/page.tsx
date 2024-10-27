@@ -7,6 +7,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useUser } from "./context/UserContext";
+import { log } from "console";
 
 export default function SignIn() {
   const router = useRouter();
@@ -18,13 +19,19 @@ export default function SignIn() {
       const user = result.user;
       const docSnap = await getDoc(doc(db, "Users", user.uid));
 
+
       if (docSnap.exists() && docSnap.data().name !== "") {
         router.push("/home");
         await setDoc(doc(db, "Users", user.uid), {
           uid: user.uid,
           name: docSnap.data().name,
+          email: user.email,
         });
       } else {
+        await setDoc(doc(db, "Users", user.uid), {
+          uid: user.uid,
+          email: user.email,
+        });
         router.push("/submitName");
       }
       updateUid(user.uid);
