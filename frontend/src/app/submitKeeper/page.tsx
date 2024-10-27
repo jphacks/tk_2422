@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useUser } from '../context/UserContext';
-import { addDoc, collection, doc } from 'firebase/firestore'
+import { addDoc, collection, doc, getDoc } from 'firebase/firestore'
 import { db } from '../../lib/firebase/firebase'
 
 const SubmitKeeper: React.FC = () => {
@@ -13,18 +13,33 @@ const SubmitKeeper: React.FC = () => {
     const [address, setAddress] = useState('');
 
     console.log("uid", uid);
+    // const docSnap = await getDoc(doc(db, "Users", uid));
+    // const name = docSnap.data()?.name
+    const fetchUserName = async (uid: string) => { // ユーザーデータを取得する新しい関数を作成
+        if (!uid) {
+            return null;
+        }
+        const docSnap = await getDoc(doc(db, "Users", uid));
+        return docSnap.data()?.name; // ここでオプショナルチェイニングを使用
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        await addDoc(collection(db, "Keepers"), {
-            start_date: startDate,
-            end_date: endDate,
-            region: region,
-            address: address,
-            uid: uid,
-        });
-        console.log("キーパー登録完了：");
-        console.log({ startDate, endDate, region, address });
+        const userName = await fetchUserName(uid);
+        if (userName) { // userNameが存在する場合のみaddDocを実行
+            await addDoc(collection(db, "Keepers"), {
+                start_date: startDate,
+                end_date: endDate,
+                region: region,
+                address: address,
+                uid: uid,
+                name: userName,
+            });
+            console.log("キーパー登録完了：");
+            console.log({ startDate, endDate, region, address });
+        } else {
+            console.error("ユーザー名が取得できませんでした。");
+        }
     };
 
     return (
