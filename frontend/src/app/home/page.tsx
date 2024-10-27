@@ -39,7 +39,7 @@ export default function Component() {
     router.push(`/home/${regionId}`);
   };
   const { uid } = useUser() || { uid: null };
-  console.log("uid", uid);
+  console.log("uid in home", uid);
 
   return (
     <div className="min-h-screen bg-gradient-to-tr from-gray-950 via-black to-gray-800">
