@@ -1,101 +1,85 @@
-import Image from "next/image";
+"use client";
+import { useRouter } from "next/navigation";
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "../lib/firebase/firebase";
+import { db } from "../lib/firebase/firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { useUser } from "./context/UserContext";
 
-export default function Home() {
+export default function SignIn() {
+  const router = useRouter();
+  const { updateUid } = useUser() || { updateUid: () => { } };
+
+  const signInWithGoogle = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const docSnap = await getDoc(doc(db, "Users", user.uid));
+      const email = user.email;
+
+      console.log(email);
+
+
+      if (docSnap.exists() && docSnap.data().name !== "") {
+        router.push("/home");
+        await setDoc(doc(db, "Users", user.uid), {
+          uid: user.uid,
+          name: docSnap.data().name,
+          email: email,
+        });
+      } else {
+        await setDoc(doc(db, "Users", user.uid), {
+          uid: user.uid,
+          email: email,
+        });
+        router.push("/submitName");
+      }
+      updateUid(user.uid);
+    } catch (error) {
+      console.error("エラーが発生しました:", error);
+    }
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-black to-gray-800 flex items-center justify-center px-4">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="">
+        <div className="text-center space-y-6 mb-12">
+          <h1 className="text-4xl font-bold text-white mb-2">Welcome to LuggPal</h1>
+          <div className="space-y-2">
+            <p className="text-2xl text-gray-200">Join as a traveler to send your luggege</p>
+            <p className="text-2xl text-gray-200">or sign up as a keeper</p>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        <div className="flex flex-col items-center space-y-8">
+          <Button
+            onClick={signInWithGoogle}
+            className="w-full max-w-md h-14 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-semibold transition-all transform hover:scale-105 flex items-center justify-center space-x-3"
+          >
+            <svg className="h-6 w-6" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
+              <path
+                fill="currentColor"
+                d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"
+              ></path>
+            </svg>
+            <span>Googleアカウントで参加</span>
+          </Button>
+
+          <p className="text-center text-sm text-gray-400 max-w-md">
+            サインインすると{" "}
+            <a href="#" className="text-emerald-400 hover:text-emerald-300 underline">
+              利用規約
+            </a>{" "}
+            と{" "}
+            <a href="#" className="text-emerald-400 hover:text-emerald-300 underline">
+              プライバシーポリシー
+            </a>
+            に同意したことになります
+          </p>
+        </div>
+      </motion.div>
     </div>
   );
 }
