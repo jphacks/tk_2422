@@ -18,6 +18,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Spinner } from "@/components/ui/spinner"; // Add a spinner component if you have one
 
 const regions = ["北海道", "東北", "関東", "中部", "近畿", "中国", "四国", "九州", "沖縄"] as const;
+const regionMap: Record<string, string> = {
+  北海道: "hokkaido",
+  東北: "tohoku",
+  関東: "kanto",
+  中部: "chubu",
+  近畿: "kinki",
+  中国: "chugoku",
+  四国: "shikoku",
+  九州: "kyushu",
+  沖縄: "okinawa",
+};
 
 const SubmitKeeper: React.FC = () => {
   const router = useRouter();
@@ -27,12 +38,10 @@ const SubmitKeeper: React.FC = () => {
   const [region, setRegion] = useState("");
   const [address, setAddress] = useState("");
   const [error, setError] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false); // New loading state
+  const [loading, setLoading] = useState<boolean>(false);
 
   const fetchUserName = async (uid: string) => {
-    if (!uid) {
-      return null;
-    }
+    if (!uid) return null;
     const docSnap = await getDoc(doc(db, "Users", uid));
     return docSnap.data()?.name;
   };
@@ -52,15 +61,16 @@ const SubmitKeeper: React.FC = () => {
       return;
     }
 
-    setLoading(true); // Set loading to true when form is submitted
+    setLoading(true);
 
     try {
       const userName = await fetchUserName(uid);
       if (userName) {
+        const regionRomaji = regionMap[region] || region;
         await addDoc(collection(db, "Keepers"), {
           start_date: startDate,
           end_date: endDate,
-          region: region,
+          region: regionRomaji,
           address: address,
           uid: uid,
           name: userName,
@@ -75,7 +85,7 @@ const SubmitKeeper: React.FC = () => {
       setError("登録中にエラーが発生しました。");
       console.error(error);
     } finally {
-      setLoading(false); // Set loading to false after submission is complete
+      setLoading(false);
     }
   };
 
@@ -96,7 +106,7 @@ const SubmitKeeper: React.FC = () => {
                   <Button
                     variant="outline"
                     className={cn("w-full h-14 rounded-full bg-white/10 hover:bg-white/20 hover:text-white text-white justify-start text-left font-normal border-0", !startDate && "text-gray-400")}
-                    disabled={loading} // Disable during loading
+                    disabled={loading}
                   >
                     <CalendarIcon className="mr-2 h-5 w-5 text-gray-100" />
                     {startDate ? format(startDate, "PPP", { locale: ja }) : <span>開始時間を選択</span>}
@@ -116,7 +126,7 @@ const SubmitKeeper: React.FC = () => {
                   <Button
                     variant="outline"
                     className={cn("w-full h-14 rounded-full bg-white/10 hover:bg-white/20 hover:text-white text-white justify-start text-left font-normal border-0", !endDate && "text-gray-400")}
-                    disabled={loading} // Disable during loading
+                    disabled={loading}
                   >
                     <CalendarIcon className="mr-2 h-5 w-5 text-gray-100" />
                     {endDate ? format(endDate, "PPP", { locale: ja }) : <span>終了日を選択</span>}
@@ -132,8 +142,6 @@ const SubmitKeeper: React.FC = () => {
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-200 px-4">地域</label>
               <Select value={region} onValueChange={setRegion} disabled={loading}>
-                {" "}
-                {/* Disable during loading */}
                 <SelectTrigger className="pl-4 w-full h-14 rounded-full bg-white/10 hover:bg-white/20 text-gray-100 border-0">
                   <SelectValue placeholder="地域を選択してください" />
                 </SelectTrigger>
@@ -157,7 +165,7 @@ const SubmitKeeper: React.FC = () => {
                 onChange={(e) => setAddress(e.target.value)}
                 className="w-full h-14 rounded-full bg-white/10 text-white placeholder-gray-400 px-6"
                 required
-                disabled={loading} // Disable during loading
+                disabled={loading}
               />
             </div>
 
