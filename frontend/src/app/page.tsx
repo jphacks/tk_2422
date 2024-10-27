@@ -10,7 +10,7 @@ import { useUser } from "./context/UserContext";
 
 export default function SignIn() {
   const router = useRouter();
-  const { updateUid } = useUser() || { updateUid: () => {} };
+  const { updateUid } = useUser() || { updateUid: () => { } };
 
   const signInWithGoogle = async () => {
     try {
@@ -39,8 +39,8 @@ export default function SignIn() {
         <div className="text-center space-y-6 mb-12">
           <h1 className="text-4xl font-bold text-white mb-2">Welcome to LuggPal</h1>
           <div className="space-y-2">
-            <p className="text-2xl text-gray-200">Join as a Traveler to send your luggage</p>
-            <p className="text-2xl text-gray-200">or sign up as a Keeper to store</p>
+            <p className="text-2xl text-gray-200">Join as a traveler to send your luggege</p>
+            <p className="text-2xl text-gray-200">or sign up as a keeper</p>
           </div>
         </div>
 
@@ -55,18 +55,19 @@ export default function SignIn() {
                 d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"
               ></path>
             </svg>
-            <span>Continue with Google</span>
+            <span>Googleアカウントで参加</span>
           </Button>
 
           <p className="text-center text-sm text-gray-400 max-w-md">
-            By signing up, you agree to our{" "}
+            サインインすると{" "}
             <a href="#" className="text-emerald-400 hover:text-emerald-300 underline">
-              Terms of Service
+              利用規約
             </a>{" "}
-            and{" "}
+            と{" "}
             <a href="#" className="text-emerald-400 hover:text-emerald-300 underline">
-              Privacy Policy
+              プライバシーポリシー
             </a>
+            に同意したことになります
           </p>
         </div>
       </motion.div>
